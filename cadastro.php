@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <select id="tipo" name="tipo" required>
                     <option value="">Selecione o tipo</option>
                     <option value="cliente">🏗️ Cliente</option>
-                    <option value="gestora">👩‍💼 Gestora</option>
+                    <option value="gestor">👩‍💼 Gestor</option>
                     <option value="patio">🚛 Operador de Pátio</option>
                 </select>
             </div>
