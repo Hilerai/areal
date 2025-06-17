@@ -1,0 +1,99 @@
+CREATE SCHEMA IF NOT EXISTS `arealdb` DEFAULT CHARACTER SET utf8mb4 ;
+USE `arealdb` ;
+
+-- -----------------------------------------------------
+-- Table `arealdb`.`usuarios`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `arealdb`.`usuarios` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NULL DEFAULT NULL,
+  `email` VARCHAR(100) NULL DEFAULT NULL,
+  `senha` VARCHAR(255) NULL DEFAULT NULL,
+  `tipo` ENUM('cliente', 'gestora', 'patio') NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `email` (`email` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 5
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
+-- Table `arealdb`.`produtos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `arealdb`.`produtos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NULL DEFAULT NULL,
+  `preco` DECIMAL(10,2) NULL DEFAULT NULL,
+  `estoque` DECIMAL(10,2) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
+-- Table `arealdb`.`pedidos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `arealdb`.`pedidos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `cliente_id` INT(11) NULL DEFAULT NULL,
+  `produto_id` INT(11) NULL DEFAULT NULL,
+  `quantidade` DECIMAL(10,2) NULL DEFAULT NULL,
+  `status` ENUM('pendente', 'carregado', 'entregue') NULL DEFAULT 'pendente',
+  `data_pedido` DATETIME NULL DEFAULT CURRENT_TIMESTAMP(),
+  PRIMARY KEY (`id`),
+  INDEX `cliente_id` (`cliente_id` ASC) VISIBLE,
+  INDEX `produto_id` (`produto_id` ASC) VISIBLE,
+  CONSTRAINT `pedidos_ibfk_1`
+    FOREIGN KEY (`cliente_id`)
+    REFERENCES `arealdb`.`usuarios` (`id`),
+  CONSTRAINT `pedidos_ibfk_2`
+    FOREIGN KEY (`produto_id`)
+    REFERENCES `arealdb`.`produtos` (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
+-- Table `arealdb`.`saidas_material`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `arealdb`.`saidas_material` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `pedido_id` INT(11) NULL DEFAULT NULL,
+  `operador_id` INT(11) NULL DEFAULT NULL,
+  `quantidade_real` DECIMAL(10,2) NULL DEFAULT NULL,
+  `data_saida` DATETIME NULL DEFAULT CURRENT_TIMESTAMP(),
+  PRIMARY KEY (`id`),
+  INDEX `pedido_id` (`pedido_id` ASC) VISIBLE,
+  INDEX `operador_id` (`operador_id` ASC) VISIBLE,
+  CONSTRAINT `saidas_material_ibfk_1`
+    FOREIGN KEY (`pedido_id`)
+    REFERENCES `arealdb`.`pedidos` (`id`),
+  CONSTRAINT `saidas_material_ibfk_2`
+    FOREIGN KEY (`operador_id`)
+    REFERENCES `arealdb`.`usuarios` (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
+-- Table `arealdb`.`veiculos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `arealdb`.`veiculos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `placa` VARCHAR(10) NOT NULL,
+  `modelo` VARCHAR(100) NOT NULL,
+  `capacidade_m3` DECIMAL(10,2) NOT NULL,
+  `status` VARCHAR(50) NULL DEFAULT 'disponivel',
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `placa` (`placa` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
