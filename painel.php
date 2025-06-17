@@ -23,7 +23,7 @@ $usuario = $_SESSION['usuario'];
         </div>
         
         <div class="menu-links">
-            <?php if ($usuario['tipo'] === 'gestora'): ?>
+            <?php if ($usuario['tipo'] === 'gestor'): ?>
                 <a href="produtos.php">📦 Gerenciar Produtos</a>
                 <a href="veiculos.php">🚛 Gerenciar Veículos</a>
             <?php elseif ($usuario['tipo'] === 'cliente'): ?>
